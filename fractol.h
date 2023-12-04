@@ -20,6 +20,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
+typedef struct	s_z
+{
+	double real;
+    double imaginary;
+}				t_z;
+
 typedef struct	s_img
 {
 	void	*img;
@@ -34,14 +40,10 @@ typedef struct	s_data
 	void	*mlx;
 	void	*mlx_win;
 	t_img	img;
-    char    *name;
-    double  real_height;
+    char	*name;
+    double  real_width;
+	t_z		c;
+	t_z		o;
 }				t_data;
-
-typedef struct	s_z
-{
-	double real;
-    double imaginary;
-}				t_z;
 
 #endif
