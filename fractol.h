@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 15:02:33 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/05 19:00:02 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/06 00:01:39 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
 
 typedef struct	s_z
 {
@@ -44,6 +45,7 @@ typedef struct	s_data
 	int		precision;
 	t_z		c;
 	t_z		o;
+	int		color_shift;
 }				t_data;
 
 #endif

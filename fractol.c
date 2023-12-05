@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 16:41:12 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/05 19:58:33 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/06 00:11:41 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,25 @@ int	create_trgb(unsigned char t, unsigned char r, unsigned char g, unsigned char
 	return (*(int *)(unsigned char [4]){b, g, r, t});
 }
 
-int	color_n_inside(int n)
+int	color_n_inside(int n, t_data data)
 {
-	n %= 108;
-	if (n <= 17)
-		return (create_trgb(0, 255, 0, n * 15));
-	else if(n <= 35)
-		return (create_trgb(0, 255 - ((n % 18) * 15), 0, 255));
-	else if(n <= 53)
-		return (create_trgb(0, 0, (n % 18) * 15, 255));
-	else if(n <= 71)
-		return (create_trgb(0, 0, 255, 255 - ((n % 18) * 15)));
-	else if(n <= 89)
-		return (create_trgb(0, (n % 18) * 15, 255, 0));
+	double	jump;
+
+	jump = 15;
+	n += data.color_shift;
+	n %= (int)(255 / jump + (255 / jump + 1) * 5 + 1);
+	if (n <= 255 / jump)
+		return (create_trgb(0, 255, 0, n * jump));
+	else if(n <= 255 / jump + 255 / jump + 1)
+		return (create_trgb(0, 255 - (n % (int)(255 / jump + 1)) * jump, 0, 255));
+	else if(n <= 255 / jump + (255 / jump + 1) * 2)
+		return (create_trgb(0, 0, (n % (int)(255 / jump + 1)) * jump, 255));
+	else if(n <= 255 / jump + (255 / jump + 1) * 3)
+		return (create_trgb(0, 0, 255, 255 - (n % (int)(255 / jump + 1)) * jump));
+	else if(n <= 255 / jump + (255 / jump + 1) * 4)
+		return (create_trgb(0, (n % (int)(255 / jump + 1)) * jump, 255, 0));
 	else
-		return (create_trgb(0, 255, 255 - ((n % 18) * 15), 0));
-	return (n);
+		return (create_trgb(0, 255, 255 - (n % (int)(255 / jump + 1)) * jump, 0));
 }
 
 t_z	pixel_to_z(int x, int y, t_data data)
@@ -88,11 +91,12 @@ t_z	pixel_to_z(int x, int y, t_data data)
 	return (z);
 }
 
-int	ft_atoi(const char *nptr)
+double	ft_atof(const char *nptr)
 {
-	int	i;
-	int	n;
-	int	res;
+	int		i;
+	int		n;
+	int		dot;
+	double	res;
 
 	n = 0;
 	i = 1;
@@ -105,8 +109,20 @@ int	ft_atoi(const char *nptr)
 			i *= -1;
 		n += 1;
 	}
-	while (nptr[n] >= '0' && nptr[n] <= '9')
-		res = res * 10 + (nptr[n++] - '0');
+	dot = 0;
+	while (nptr[n] >= '0' && nptr[n] <= '9' || nptr[n] == '.')
+	{
+		if (nptr[n] == '.')
+			dot = 1;
+		else if (!dot)
+			res = res * 10 + (nptr[n] - '0');
+		else
+		{
+			res += (nptr[n] - '0') / pow(10, dot);
+			dot++;
+		}
+		n++;
+	}
 	return (res * i);
 }
 
@@ -139,7 +155,7 @@ void	render_fractal(t_data *data)
 			z = pixel_to_z(x, y, *data);
 			if (is_mandelbrot)
 				data->c = z;
-			color = color_n_inside(n_inside(z, data->c, data->precision));
+			color = color_n_inside(n_inside(z, data->c, data->precision), *data);
 			my_mlx_pixel_put(&data->img, x, y, color);
 			x++;
 		}
@@ -167,13 +183,13 @@ void	ft_putstr(char *s)
 void	data_build(t_data *data, char **argv)
 {
 	data->name = argv[1];
-	if (!ft_strcmp(data->name, "Julia"))
-	{
-		data->c.real = ft_atoi(argv[2]);
-		data->c.imaginary = ft_atoi(argv[3]);
-	}
 	data->c.real = 0.285;
 	data->c.imaginary = 0.285;
+	if (argv[2] && argv[3] && !ft_strcmp(data->name, "Julia"))
+	{
+		data->c.real = ft_atof(argv[2]);
+		data->c.imaginary = ft_atof(argv[3]);
+	}
 	data->mlx = mlx_init();
 	if (!data->mlx)
 		exit(EXIT_FAILURE);
@@ -196,8 +212,11 @@ void	data_build(t_data *data, char **argv)
 								&data->img.line_length, &data->img.endian);
 	data->real_width = 3;
 	data->o.real = 565;
+	if (!ft_strcmp(data->name, "Julia"))
+		data->o.real = 400;
 	data->o.imaginary = HEIGHT / 2;
-	data->precision = 100;
+	data->precision = 120;
+	data->color_shift = 0;
 }
 
 int	esc(t_data *data)
@@ -238,8 +257,12 @@ int	key_down(int keysym, t_data *data)
 		data->c.imaginary += 0.005;
 	else if (keysym == XK_s)
 		data->c.imaginary -= 0.005;
+	else if (keysym == XK_r)
+		data->precision -= 5;
 	else if (keysym == XK_t)
-		data->precision += 10;
+		data->precision += 5;
+	else if (keysym == XK_c)
+		data->color_shift++;
 	render_fractal(data);
 }
 
@@ -248,9 +271,9 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (!(argc == 2 && !ft_strcmp(argv[1], "Mandelbrot")
-		|| argc == 4 && !ft_strcmp(argv[1], "Julia")))
+		|| (argc == 4 || argc == 2) && !ft_strcmp(argv[1], "Julia")))
 	{
-		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia <real> <imaginary>\n");
+		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia\nJulia <real> <imaginary>\n");
 		exit(EXIT_FAILURE);
 	}
 	data_build(&data, argv);
