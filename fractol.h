@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 15:02:33 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/04 18:45:34 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:00:02 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "minilibx-linux/mlx.h"
 #include <X11/keysym.h>
 #include <stdlib.h>
-#include <math.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -42,6 +41,7 @@ typedef struct	s_data
 	t_img	img;
     char	*name;
     double  real_width;
+	int		precision;
 	t_z		c;
 	t_z		o;
 }				t_data;
