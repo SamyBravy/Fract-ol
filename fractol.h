@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 15:02:33 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/06 12:37:46 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:45:00 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ typedef struct	s_data
 	int		precision;
 	t_z		c;
 	t_z		original_c;
-	t_z		o;
+	t_z		center;
 	int		color_shift;
+	int		jump;
 }				t_data;
 
 #endif

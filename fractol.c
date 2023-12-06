@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 16:41:12 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/06 13:20:37 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:44:43 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,32 @@ int	create_trgb(unsigned char t, unsigned char r, unsigned char g, unsigned char
 	return (*(int *)(unsigned char [4]){b, g, r, t});
 }
 
-int	color_n_inside(int n, t_data data)
+int	color_n_inside(int n, t_data *data)
 {
-	double	jump;
-
-	jump = 15;
-	n += data.color_shift;
-	n %= (int)(6 * 255 / jump + 1);
-	if (n <= 255 / jump)
-		return (create_trgb(0, 255, 0, n * jump));
-	else if(n <= 2 * 255 / jump)
-		return (create_trgb(0, 255 - (n % (int)(255 / jump + 1)) * jump, 0, 255));
-	else if(n <= 3 * 255 / jump)
-		return (create_trgb(0, 0, (n % (int)(255 / jump + 1)) * jump, 255));
-	else if(n <= 4 * 255 / jump)
-		return (create_trgb(0, 0, 255, 255 - (n % (int)(255 / jump + 1)) * jump));
-	else if(n <= 5 * 255 / jump)
-		return (create_trgb(0, (n % (int)(255 / jump + 1)) * jump, 255, 0));
+	n += data->color_shift;
+	n %= 6 * 255 / data->jump;
+	if (n < 255 / data->jump)
+		return (create_trgb(0, 255, 0, n * data->jump));
+	else if(n < 2 * 255 / data->jump)
+		return (create_trgb(0, 255 - (n % (255 / data->jump)) * data->jump, 0, 255));
+	else if(n < 3 * 255 / data->jump)
+		return (create_trgb(0, 0, (n % (255 / data->jump)) * data->jump, 255));
+	else if(n < 4 * 255 / data->jump)
+		return (create_trgb(0, 0, 255, 255 - (n % (255 / data->jump)) * data->jump));
+	else if(n < 5 * 255 / data->jump)
+		return (create_trgb(0, (n % (255 / data->jump)) * data->jump, 255, 0));
 	else
-		return (create_trgb(0, 255, 255 - (n % (int)(255 / jump + 1)) * jump, 0));
+		return (create_trgb(0, 255, 255 - (n % (255 / data->jump)) * data->jump, 0));
 }
 
-t_z	pixel_to_z(int x, int y, t_data data)
+t_z	pixel_to_z(int x, int y, t_data *data)
 {
 	double	pixel_unit;
 	t_z	z;
 
-	pixel_unit = data.real_width / WIDTH;
-	z.real = (x - data.o.real) * pixel_unit + pixel_unit / 2;
-	z.imaginary = (y - data.o.imaginary) * pixel_unit + pixel_unit / 2;
+	pixel_unit = data->real_width / WIDTH;
+	z.real = (x - WIDTH / 2) * pixel_unit - data->center.real;
+	z.imaginary = (y - HEIGHT / 2) * pixel_unit - data->center.imaginary;
 	return (z);
 }
 
@@ -152,10 +149,10 @@ void	render_fractal(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			z = pixel_to_z(x, y, *data);
+			z = pixel_to_z(x, y, data);
 			if (is_mandelbrot)
 				data->c = z;
-			color = color_n_inside(n_inside(z, data->c, data->precision), *data);
+			color = color_n_inside(n_inside(z, data->c, data->precision), data);
 			my_mlx_pixel_put(&data->img, x, y, color);
 			x++;
 		}
@@ -183,8 +180,8 @@ void	ft_putstr(char *s)
 void	data_build(t_data *data, char **argv)
 {
 	data->name = argv[1];
-	data->c.real = 0.35;
-	data->c.imaginary = 0.35;
+	data->c.real = 0.33;
+	data->c.imaginary = 0.33;
 	if (argv[2] && argv[3] && !ft_strcmp(data->name, "Julia"))
 	{
 		data->c.real = ft_atof(argv[2]);
@@ -212,12 +209,13 @@ void	data_build(t_data *data, char **argv)
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 								&data->img.line_length, &data->img.endian);
 	data->real_width = 3;
-	data->o.real = 565;
+	data->center.real = 0.7;
 	if (!ft_strcmp(data->name, "Julia"))
-		data->o.real = 400;
-	data->o.imaginary = HEIGHT / 2;
-	data->precision = 300;
+		data->center.real = 0;
+	data->center.imaginary = 0;
+	data->precision = 150;
 	data->color_shift = 0;
+	data->jump = 15;
 }
 
 int	esc(t_data *data)
@@ -229,48 +227,53 @@ int	esc(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-double	perc(double n, double p)
+int	key_down(int keycode, t_data *data)
 {
-	return (n * p / 100);
-}
-
-int	key_down(int keysym, t_data *data)
-{
-	if (keysym == XK_Escape)
+	if (keycode == XK_Escape)
 		esc(data);
-	if (keysym == XK_Right)
-		data->o.real -= perc(data->o.real, 7);
-	else if (keysym == XK_Left)
-		data->o.real += perc(data->o.real, 7);
-	else if (keysym == XK_Up)
-		data->o.imaginary += perc(data->o.imaginary, 7);
-	else if (keysym == XK_Down)
-		data->o.imaginary -= perc(data->o.imaginary, 7);
-	else if (keysym == XK_d)
+	if (keycode == XK_Right)
+		data->center.real -= data->real_width * 5 / 100;
+	else if (keycode == XK_Left)
+		data->center.real += data->real_width * 5 / 100;
+	else if (keycode == XK_Up)
+		data->center.imaginary += data->real_width * 5 / 100;
+	else if (keycode == XK_Down)
+		data->center.imaginary -= data->real_width * 5 / 100;
+	else if (keycode == XK_d)
 		data->c.real += 0.005;
-	else if (keysym == XK_a)
+	else if (keycode == XK_a)
 		data->c.real -= 0.005;
-	else if (keysym == XK_w)
+	else if (keycode == XK_w)
 		data->c.imaginary += 0.005;
-	else if (keysym == XK_s)
+	else if (keycode == XK_s)
 		data->c.imaginary -= 0.005;
-	else if (keysym == XK_r)
+	else if (keycode == XK_r)
 		data->c = data->original_c;
-	else if (keysym == XK_t)
-		data->precision += 5;
-	else if (keysym == XK_c)
+	else if (keycode == XK_t)
+		data->precision += 10;
+	else if (keycode == XK_c)
 		data->color_shift++;
+	else if (keycode == XK_z && data->jump > 5)
+		data->jump -= 5;
+	else if (keycode == XK_x)
+		data->jump += 5;
 	else
 		return (0);
 	render_fractal(data);
 }
 
-int	mouse_hook(int keysym, t_data *data)
+int	mouse_hook(int keycode, int x, int y, t_data *data)
 {
-	if (keysym == 4)
-		data->real_width -= perc(data->real_width, 2);
-	else if (keysym == 5)
-		data->real_width += perc(data->real_width, 2);
+	if (keycode == 4)
+	{
+		data->real_width = data->real_width * 95 / 100;
+		data->precision += 1;
+	}
+	else if (keycode == 5)
+	{
+		data->real_width = data->real_width * 105 / 100;
+		data->precision -= 1;
+	}
 	else
 		return (0);
 	render_fractal(data);
