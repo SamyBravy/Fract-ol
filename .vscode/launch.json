@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/samyb/OneDrive/Samuele/42/Fract-ol",
-      "program": "c:/Users/samyb/OneDrive/Samuele/42/Fract-ol/build/Debug/outDebug",
+      "cwd": "//wsl.localhost/Ubuntu-20.04/home/samy_bravy/42/Fract-ol",
+      "program": "//wsl.localhost/Ubuntu-20.04/home/samy_bravy/42/Fract-ol/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
