@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:41:24 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 17:42:04 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/07 20:22:12 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,9 @@ int	esc(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-int	key_down(int keycode, t_data *data)
+static int	other_keys(int keycode, t_data *data)
 {
-	if (keycode == XK_Escape)
-		esc(data);
-	if (keycode == XK_Right)
-		data->center.real -= data->real_width * 0.05;
-	else if (keycode == XK_Left)
-		data->center.real += data->real_width * 0.05;
-	else if (keycode == XK_Up)
-		data->center.imaginary += data->real_width * 0.05;
-	else if (keycode == XK_Down)
-		data->center.imaginary -= data->real_width * 0.05;
-	else if (keycode == XK_d)
-		data->c.real += 0.005;
-	else if (keycode == XK_a)
-		data->c.real -= 0.005;
-	else if (keycode == XK_w)
-		data->c.imaginary += 0.005;
-	else if (keycode == XK_s)
-		data->c.imaginary -= 0.005;
-	else if (keycode == XK_r)
+	if (keycode == XK_r)
 		data->c = data->original_c;
 	else if (keycode == XK_y)
 		data->precision += 10;
@@ -65,35 +47,66 @@ int	key_down(int keycode, t_data *data)
 	}
 	else
 		return (0);
+	return (1);
+}
+
+int	key_down(int keycode, t_data *data)
+{
+	if (keycode == XK_Escape)
+		esc(data);
+	if (keycode == XK_Right)
+		data->center.real -= data->real_width * 0.04;
+	else if (keycode == XK_Left)
+		data->center.real += data->real_width * 0.04;
+	else if (keycode == XK_Up)
+		data->center.imaginary += data->real_width * 0.04;
+	else if (keycode == XK_Down)
+		data->center.imaginary -= data->real_width * 0.04;
+	else if (keycode == XK_d)
+		data->c.real += 0.005;
+	else if (keycode == XK_a)
+		data->c.real -= 0.005;
+	else if (keycode == XK_w)
+		data->c.imaginary += 0.005;
+	else if (keycode == XK_s)
+		data->c.imaginary -= 0.005;
+	else if (!other_keys(keycode, data))
+		return (0);
 	render_fractal(data);
 	return (0);
+}
+
+static void	reset(t_data *data)
+{
+	data->real_width = 3;
+	data->center.real = 0.7;
+	if (data->name[0] == 'J')
+		data->center.real = 0;
+	data->center.imaginary = 0;
+	data->precision = 150;
 }
 
 int	mouse_hook(int keycode, int x, int y, t_data *data)
 {
 	if (keycode == 4)
 	{
-		data->center.real -= (x - WIDTH / 2) * data->real_width / WIDTH * 0.05;
-		data->center.imaginary -= (y - HEIGHT / 2) * data->real_width / WIDTH * 0.05;
+		data->center.real -= (x - WIDTH / 2) * data->real_width / WIDTH * 0.1;
+		data->center.imaginary -= (y - HEIGHT / 2)
+			* data->real_width / WIDTH * 0.1;
 		data->real_width = data->real_width * 0.95;
 		data->precision += 1;
 	}
 	else if (keycode == 5)
 	{
 		data->real_width = data->real_width * 1.05;
-		data->center.real += (x - WIDTH / 2) * data->real_width / WIDTH * 0.05;
-		data->center.imaginary += (y - HEIGHT / 2) * data->real_width / WIDTH * 0.05;
+		data->center.real += (x - WIDTH / 2)
+			* data->real_width / WIDTH * 0.1;
+		data->center.imaginary += (y - HEIGHT / 2)
+			* data->real_width / WIDTH * 0.1;
 		data->precision -= 1;
 	}
 	else if (keycode == 2)
-	{
-		data->real_width = 3;
-		data->center.real = 0.7;
-		if (data->name[0] == 'J')
-			data->center.real = 0;
-		data->center.imaginary = 0;
-		data->precision = 150;
-	}
+		reset(data);
 	else
 		return (0);
 	render_fractal(data);

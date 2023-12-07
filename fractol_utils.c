@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   fractol_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:31:27 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 17:39:48 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/07 19:12:08 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-void    before_digit(char *nptr, int *n, int *i)
+static void	before_digit(char *nptr, int *n, int *i)
 {
-    while ((nptr[*n] >= 9 && nptr[*n] <= 13) || nptr[*n] == ' ')
+	while ((nptr[*n] >= 9 && nptr[*n] <= 13) || nptr[*n] == ' ')
 		n += 1;
 	if (nptr[*n] == '-' || nptr[*n] == '+')
 	{
@@ -34,7 +34,7 @@ void    before_digit(char *nptr, int *n, int *i)
 	}
 }
 
-double	ft_atof(const char *nptr)
+double	ft_atof(char *nptr)
 {
 	int		i;
 	int		n;
@@ -70,4 +70,13 @@ int	ft_strlen(char const *s)
 	while (s && s[l])
 		l++;
 	return (l);
+}
+
+void	ft_putstr(char *s)
+{
+	if (s)
+	{
+		if (write(1, s, ft_strlen(s)))
+			s += 0;
+	}
 }
