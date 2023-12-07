@@ -1,4 +1,4 @@
-// gcc *.c -Lminilibx-linux -lmlx -lX11 -lXext -lm
+// gcc fractol.c -Lminilibx-linux -lmlx -lX11 -lXext -lm -Werror -Wextra -Wall -O3
 
 #include "fractol.h"
 #define WIDTH 1920

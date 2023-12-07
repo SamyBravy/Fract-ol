@@ -155,7 +155,7 @@ double	ft_atof(const char *nptr)
 		n += 1;
 	}
 	dot = 0;
-	while (nptr[n] >= '0' && nptr[n] <= '9' || nptr[n] == '.')
+	while ((nptr[n] >= '0' && nptr[n] <= '9') || nptr[n] == '.')
 	{
 		if (nptr[n] == '.')
 			dot = 1;
@@ -199,6 +199,7 @@ int	print_menu(t_data *data)
 		mlx_string_put(data->mlx, data->mlx_win, 4, 210, 0x00FFFFFF, "S: decrease c's imaginary part");
 		mlx_string_put(data->mlx, data->mlx_win, 4, 225, 0x00FFFFFF, "R: reset c's values");
 	}
+	return (0);
 }
 
 void	render_fractal(t_data *data)
@@ -239,7 +240,10 @@ int	ft_strlen(char const *s)
 void	ft_putstr(char *s)
 {
 	if (s)
-		write(1, s, ft_strlen(s));
+	{
+		if(write(1, s, ft_strlen(s)))
+			s += 0;
+	}
 }
 
 void	data_build(t_data *data, char **argv)
@@ -337,6 +341,7 @@ int	key_down(int keycode, t_data *data)
 	else
 		return (0);
 	render_fractal(data);
+	return (0);
 }
 
 int	mouse_hook(int keycode, int x, int y, t_data *data)
@@ -367,14 +372,15 @@ int	mouse_hook(int keycode, int x, int y, t_data *data)
 	else
 		return (0);
 	render_fractal(data);
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (!(argc == 2 && !ft_strcmp(argv[1], "Mandelbrot")
-		|| (argc == 4 || argc == 2) && !ft_strcmp(argv[1], "Julia")))
+	if (!((argc == 2 && !ft_strcmp(argv[1], "Mandelbrot"))
+		|| ((argc == 4 || argc == 2) && !ft_strcmp(argv[1], "Julia"))))
 	{
 		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia\nJulia <real> <imaginary>\n");
 		exit(EXIT_FAILURE);
