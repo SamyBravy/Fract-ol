@@ -15,7 +15,7 @@ SRC = fractol.c fractal_functions.c fractol_utils.c ft_for_mlx.c commands.c oper
 OBJ = $(SRC:.c=.o)
 FLAGS = -Wall -Wextra -Werror -O3
 LIBS = -Lminilibx-linux -lmlx -lX11 -lXext -lm
-CC = gcc
+CC = cc
 
 all: minilibx $(NAME)
 

@@ -23,8 +23,8 @@
 # include <unistd.h>
 # include <math.h>
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 650
+# define HEIGHT 650
 
 typedef struct s_z
 {
@@ -53,7 +53,7 @@ typedef struct s_data
 	t_z			original_c;
 	t_z			center;
 	int			exp;
-	int			c_inv;
+	int			type;
 	int			color_shift;
 	int			jump;
 }	t_data;

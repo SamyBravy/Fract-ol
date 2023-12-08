@@ -84,7 +84,7 @@ int	n_inside(t_z z, t_data *data)
 		if (data->name[0] != 'C')
 			z = funct_apply(z, data->c);
 		else
-			z = variable_funct_apply(z, data->c, data->exp, data->c_inv);
+			z = variable_funct_apply(z, data->c, data->exp, data->type);
 		i++;
 	}
 	return (i);

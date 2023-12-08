@@ -26,7 +26,7 @@ void	render_fractal(t_data *data)
 		while (x < WIDTH)
 		{
 			z = pixel_to_z(x, y, data);
-			if (data->name[0] != 'J')
+			if (!data->type)
 				data->c = z;
 			color = color_n_inside(n_inside(z, data), data);
 			my_mlx_pixel_put(&data->img, x, y, color);
@@ -41,26 +41,29 @@ static void	build_parameters(t_data *data, char **argv)
 {
 	data->c.real = 0.33;
 	data->c.imaginary = 0.33;
-	if (argv[2] && argv[3] && data->name[0] == 'J')
-	{
-		data->c.real = ft_atof(argv[2]);
-		data->c.imaginary = ft_atof(argv[3]);
-	}
+	data->type = 0;
+	data->center.real = 0.7;
+	data->exp = 2;
 	data->original_c = data->c;
 	data->real_width = 3;
-	data->center.real = 0.7;
-	if (data->name[0] == 'J')
-		data->center.real = 0;
 	data->center.imaginary = 0;
 	data->precision = 150;
 	data->color_shift = 0;
 	data->jump = 15;
-	data->exp = 2;
-	data->c_inv = 0;
-	if (data->name[0] == 'C')
+	if (data->name[0] == 'J')
+	{
+		if (argv[2] && argv[3])
+		{
+			data->c.real = ft_atof(argv[2]);
+			data->c.imaginary = ft_atof(argv[3]);
+		}
+		data->type = 1;
+		data->center.real = 0;
+	}
+	else if (data->name[0] == 'C')
 	{
 		data->exp = atof(argv[2]);
-		data->c_inv = atof(argv[3]);
+		data->type = atof(argv[3]);
 	}
 }
 
@@ -98,8 +101,8 @@ int	main(int argc, char **argv)
 			|| ((argc == 4 || argc == 2) && !ft_strcmp(argv[1], "Julia"))
 			|| (argc == 4 && !ft_strcmp(argv[1], "Custom"))))
 	{
-		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia\n");
-		ft_putstr("Julia <real> <imaginary>\nCustom <z_exp> <is_c_inverted>\n");
+		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia <real> <imaginary>\n");
+		ft_putstr("Julia\nCustom <z_exp> <is_c_inverted>\n");
 		exit(EXIT_FAILURE);
 	}
 	data_build(&data, argv);
