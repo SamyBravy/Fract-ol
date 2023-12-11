@@ -6,12 +6,9 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 15:02:33 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 21:14:39 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/11 12:21:14 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*gcc *.c -Lminilibx-linux -lmlx -lX11 -lXext -lm
--Werror -Wextra -Wall -O3*/
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
@@ -19,7 +16,6 @@
 # include "minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <unistd.h>
 # include <math.h>
 
