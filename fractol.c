@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 16:41:12 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 19:43:01 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/11 11:04:25 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void	build_parameters(t_data *data, char **argv)
 	data->type = 0;
 	data->center.real = 0.7;
 	data->exp = 2;
-	data->original_c = data->c;
 	data->real_width = 3;
 	data->center.imaginary = 0;
 	data->precision = 150;
@@ -60,11 +59,11 @@ static void	build_parameters(t_data *data, char **argv)
 		data->type = 1;
 		data->center.real = 0;
 	}
-	else if (data->name[0] == 'C')
-	{
-		data->exp = atof(argv[2]);
-		data->type = atof(argv[3]);
-	}
+	data->original_c = data->c;
+	if (data->name[0] != 'C')
+		return ;
+	data->exp = atof(argv[2]);
+	data->type = atof(argv[3]);
 }
 
 void	data_build(t_data *data, char **argv)
@@ -101,8 +100,8 @@ int	main(int argc, char **argv)
 			|| ((argc == 4 || argc == 2) && !ft_strcmp(argv[1], "Julia"))
 			|| (argc == 4 && !ft_strcmp(argv[1], "Custom"))))
 	{
-		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia <real> <imaginary>\n");
-		ft_putstr("Julia\nCustom <z_exp> <is_c_inverted>\n");
+		ft_putstr("Error\nValid parameters:\nMandelbrot\nJulia\n");
+		ft_putstr("Julia <real> <imaginary>\nCustom <z_exp> <is_c_inverted>\n");
 		exit(EXIT_FAILURE);
 	}
 	data_build(&data, argv);
