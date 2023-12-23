@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_functions.c                                     :+:      :+:    :+:   */
+/*   fractal_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 18:58:36 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 19:00:27 by sdell-er         ###   ########.fr       */
+/*   Updated: 2023/12/23 14:13:17 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ t_z	pixel_to_z(int x, int y, t_data *data)
 t_z	variable_funct_apply(t_z n, t_z c, int z_exp, int c_inv)
 {
 	t_z	z_powered;
-	t_z	unit;
 	int	i;
 
 	z_powered = n;
@@ -55,11 +54,7 @@ t_z	variable_funct_apply(t_z n, t_z c, int z_exp, int c_inv)
 	while (i++ < z_exp)
 		z_powered = mul_z(z_powered, n);
 	if (c_inv)
-	{
-		unit.real = 1;
-		unit.imaginary = 0;
-		c = div_z(unit, c);
-	}
+		c = div_z((t_z){1, 0}, c);
 	return (sum_z(z_powered, c));
 }
 
