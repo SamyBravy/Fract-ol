@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*   fractol_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 15:02:33 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/14 15:38:07 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/01/02 17:13:17 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FRACTOL_H
-# define FRACTOL_H
+#ifndef FRACTOL_BONUS_H
+# define FRACTOL_BONUS_H
 
-# include "minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <math.h>
+# include <stdio.h>
 
 # define WIDTH 650
 # define HEIGHT 650

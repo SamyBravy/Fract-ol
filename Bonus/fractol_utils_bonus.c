@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol_utils.c                                    :+:      :+:    :+:   */
+/*   fractol_utils_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:31:27 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 19:12:08 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/01/03 14:33:32 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "fractol_bonus.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -25,12 +25,12 @@ int	ft_strcmp(char *s1, char *s2)
 static void	before_digit(char *nptr, int *n, int *i)
 {
 	while ((nptr[*n] >= 9 && nptr[*n] <= 13) || nptr[*n] == ' ')
-		n += 1;
+		*n += 1;
 	if (nptr[*n] == '-' || nptr[*n] == '+')
 	{
 		if (nptr[*n] == '-')
 			*i *= -1;
-		n += 1;
+		*n += 1;
 	}
 }
 

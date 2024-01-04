@@ -6,7 +6,7 @@
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 18:56:24 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/07 18:57:45 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/01/04 12:07:04 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	print_menu(t_data *data)
 	str[12] = "S: decrease c's imaginary part";
 	str[13] = "R: reset c's values";
 	i = 1;
-	while (++i * 15 <= 150 + 75 * (data->name[0] == 'J'))
+	while (++i * 15 <= 150 + 75 * (data->name[0] != 'M'))
 		mlx_string_put(data->mlx, data->mlx_win, 4, i * 15,
 			0x00FFFFFF, str[i - 2]);
 	return (0);

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractal_functions.c                                :+:      :+:    :+:   */
+/*   fractal_functions_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sdell-er <sdell-er@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 18:58:36 by sdell-er          #+#    #+#             */
-/*   Updated: 2023/12/23 14:13:17 by sdell-er         ###   ########.fr       */
+/*   Updated: 2024/01/02 16:36:16 by sdell-er         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "fractol_bonus.h"
 
 int	color_n_inside(int n, t_data *data)
 {
