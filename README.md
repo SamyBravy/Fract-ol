@@ -8,12 +8,12 @@ A graphical exploration project to generate and interact with various fractals u
 ## 📸 Gallery
 
 <div align="center">
-  <img src="Mandelbrot.png" alt="Mandelbrot" width="200" />
-  <img src="Julia.png" alt="Julia" width="200" />
+  <img src="Mandelbrot.png" alt="Mandelbrot" width="300" />
+  <img src="Julia.png" alt="Julia" width="300" />
 </div>
 <div align="center">
-  <img src="Custom_tunnel.png" alt="Custom Tunnel" width="200" />
-  <img src="Custom_sphere.png" alt="Custom Sphere" width="200" />
+  <img src="Custom_tunnel.png" alt="Custom Tunnel" width="300" />
+  <img src="Custom_sphere.png" alt="Custom Sphere" width="300" />
 </div>
 
 ## 🚀 Usage
