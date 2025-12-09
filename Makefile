@@ -11,11 +11,8 @@
 # **************************************************************************** #
 
 NAME = fractol
-NAME_BONUS = fractol_bonus
-SRC = ./Mandatory/fractol.c ./Mandatory/fractal_functions.c ./Mandatory/fractol_utils.c ./Mandatory/ft_for_mlx.c ./Mandatory/commands.c ./Mandatory/operations.c
-SRC_B = ./Bonus/fractol_bonus.c ./Bonus/fractal_functions_bonus.c ./Bonus/fractol_utils_bonus.c ./Bonus/ft_for_mlx_bonus.c ./Bonus/commands_bonus.c ./Bonus/operations_bonus.c
+SRC = ./srcs/fractol_bonus.c ./srcs/fractal_functions_bonus.c ./srcs/fractol_utils_bonus.c ./srcs/ft_for_mlx_bonus.c ./srcs/commands_bonus.c ./srcs/operations_bonus.c
 OBJ = $(SRC:.c=.o)
-OBJ_B = $(SRC_B:.c=.o)
 FLAGS = -Wall -Wextra -Werror -O3
 LIBS = -Lminilibx-linux -lmlx -lX11 -lXext -lm
 CC = cc
@@ -23,26 +20,24 @@ CC = cc
 all: $(NAME)
 
 minilibx:
-	@$(MAKE) -C minilibx-linux
+	@$(MAKE) -C minilibx-linux > /dev/null 2>&1
 
 $(NAME): minilibx $(OBJ)
-	$(CC) $(OBJ) $(LIBS) -o $(NAME)
-	
-bonus : minilibx $(NAME_BONUS)
-
-$(NAME_BONUS): $(OBJ_B)
-	$(CC) $(OBJ_B) $(LIBS) -o $(NAME_BONUS)
+	@$(CC) $(OBJ) $(LIBS) -o $(NAME) > /dev/null
+	@echo "\e[0;93m[$(NAME)] compiled!\e[0m"
 
 %.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	$(MAKE) -C minilibx-linux clean
-	rm -f $(OBJ) $(OBJ_B)
+	@$(MAKE) -C minilibx-linux clean > /dev/null
+	@rm -f $(OBJ)
+	@echo "\e[0;91mcleaned!\e[0m"
 
 fclean: clean
-	$(MAKE) -C minilibx-linux clean
-	rm -f $(NAME) $(NAME_BONUS)
+	@$(MAKE) -C minilibx-linux clean > /dev/null
+	@rm -f $(NAME)
+	@echo "\e[0;91m[$(NAME)] deleted!\e[0m"
 
 re: fclean all
 
